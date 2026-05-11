@@ -1,0 +1,1348 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gutachten-Verwaltung · hmb gmbh ingenieure</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Barlow:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --hmb-orange: #f28d00;
+            --hmb-orange-dark: #b66a00;
+            --hmb-orange-light: #eb9c2e;
+            --hmb-text: #32302e;
+            --hmb-gray: #6d6d6d;
+            --hmb-gray-dark: #444444;
+            --hmb-gray-soft: #757373;
+            --hmb-light: #eeeeee;
+            --hmb-light-soft: #fafafa;
+            --hmb-bg: #ffffff;
+            --hmb-shadow: 0 0.1em 0.1em rgba(0,0,0,0.1);
+            --hmb-shadow-card: 0 2px 6px rgba(0,0,0,0.06);
+            --hmb-shadow-modal: 0 20px 60px rgba(0,0,0,0.3);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html { font-size: 100%; }
+
+        body {
+            font-family: 'Barlow', Helvetica, Arial, sans-serif;
+            font-weight: 400;
+            background-color: var(--hmb-light-soft);
+            color: var(--hmb-text);
+            line-height: 1.5;
+            text-rendering: optimizeLegibility;
+            -webkit-font-smoothing: antialiased;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        a { color: var(--hmb-orange); text-decoration: none; }
+        a:hover { color: var(--hmb-orange-dark); }
+
+        /* ---------- Header ---------- */
+        .site-header {
+            background: #fff;
+            border-bottom: 1px solid var(--hmb-light);
+            box-shadow: var(--hmb-shadow);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .site-header-inner {
+            max-width: 1280px;
+            margin: 0 auto;
+            padding: 20px 32px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 24px;
+            flex-wrap: wrap;
+        }
+
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 18px;
+            text-decoration: none;
+            color: var(--hmb-text);
+        }
+
+        .brand-logo {
+            height: 56px;
+            width: auto;
+            display: block;
+        }
+
+        .brand-divider {
+            width: 1px;
+            height: 40px;
+            background: var(--hmb-light);
+        }
+
+        .brand-meta {
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+        }
+
+        .brand-meta-eyebrow {
+            font-family: 'Barlow', sans-serif;
+            font-weight: 700;
+            font-size: 0.7rem;
+            color: var(--hmb-orange);
+            letter-spacing: 0.18em;
+            text-transform: uppercase;
+        }
+
+        .brand-meta-title {
+            font-family: 'Barlow', sans-serif;
+            font-weight: 300;
+            font-size: 1.15rem;
+            color: var(--hmb-text);
+            letter-spacing: 0.02em;
+            line-height: 1.2;
+        }
+
+        .site-nav {
+            display: flex;
+            align-items: center;
+            gap: 24px;
+            font-size: 0.85rem;
+            font-weight: 500;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            color: var(--hmb-gray);
+        }
+
+        .site-nav-pill {
+            padding: 6px 14px;
+            border: 1px solid var(--hmb-orange);
+            color: var(--hmb-orange);
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            font-weight: 700;
+            font-size: 0.7rem;
+        }
+
+        /* ---------- Main ---------- */
+        main {
+            flex: 1;
+            padding: 56px 32px;
+            width: 100%;
+        }
+
+        .container {
+            max-width: 1280px;
+            margin: 0 auto;
+            background: #fff;
+            padding: 56px 64px;
+            box-shadow: var(--hmb-shadow-card);
+            border-top: 4px solid var(--hmb-orange);
+            position: relative;
+        }
+
+        /* ---------- Typography ---------- */
+        h1 {
+            font-family: 'Barlow', sans-serif;
+            font-weight: 300;
+            color: var(--hmb-orange);
+            font-size: 2.75rem;
+            text-align: center;
+            margin-bottom: 12px;
+            letter-spacing: 0.02em;
+            line-height: 1.15;
+        }
+
+        h2 {
+            font-family: 'Barlow', sans-serif;
+            font-weight: 300;
+            color: var(--hmb-orange);
+            font-size: 1.75rem;
+            letter-spacing: 0.02em;
+            line-height: 1.2;
+            margin-bottom: 16px;
+        }
+
+        h3 {
+            font-family: 'Barlow', sans-serif;
+            font-weight: 700;
+            color: var(--hmb-text);
+            font-size: 1.05rem;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            margin-bottom: 18px;
+        }
+
+        .subtitle {
+            text-align: center;
+            color: var(--hmb-gray);
+            font-size: 1.05rem;
+            font-weight: 300;
+            margin-bottom: 8px;
+            letter-spacing: 0.04em;
+        }
+
+        .title-rule {
+            display: block;
+            width: 80px;
+            height: 2px;
+            background: var(--hmb-orange);
+            margin: 24px auto 40px;
+        }
+
+        /* ---------- Controls ---------- */
+        .controls {
+            margin: 0 0 32px 0;
+            padding: 24px 28px;
+            background: var(--hmb-light-soft);
+            border-left: 4px solid var(--hmb-orange);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 16px;
+        }
+
+        .controls > div {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+
+        /* ---------- Inputs ---------- */
+        input[type="text"],
+        input[type="date"],
+        input[type="search"],
+        select {
+            padding: 12px 16px;
+            border: 1px solid #ccc;
+            background: #fff;
+            font-family: 'Barlow', sans-serif;
+            font-size: 0.95rem;
+            color: var(--hmb-text);
+            border-radius: 0;
+            transition: border-color 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        .form-name-input {
+            width: 280px;
+        }
+
+        input:focus,
+        select:focus {
+            outline: none;
+            border-color: var(--hmb-orange);
+            box-shadow: 0 0 0 3px rgba(242, 141, 0, 0.15);
+        }
+
+        /* ---------- Buttons ---------- */
+        .new-form-btn {
+            padding: 13px 28px;
+            background: var(--hmb-orange);
+            color: #fff;
+            border: 2px solid var(--hmb-orange);
+            border-radius: 0;
+            font-family: 'Barlow', sans-serif;
+            font-weight: 700;
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .new-form-btn:hover {
+            background: #fff;
+            color: var(--hmb-orange);
+        }
+
+        .new-form-btn:disabled {
+            background: var(--hmb-light);
+            border-color: var(--hmb-light);
+            color: var(--hmb-gray);
+            cursor: not-allowed;
+        }
+
+        /* ---------- Submission List ---------- */
+        .submission-list {
+            margin-top: 16px;
+        }
+
+        .submission-list h3 {
+            display: inline-block;
+            margin-bottom: 24px;
+            padding-bottom: 8px;
+            border-bottom: 2px solid var(--hmb-orange);
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background: #fff;
+            box-shadow: var(--hmb-shadow-card);
+        }
+
+        th {
+            text-align: left;
+            padding: 16px 14px;
+            background: var(--hmb-text);
+            color: #fff;
+            font-family: 'Barlow', sans-serif;
+            font-weight: 700;
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 0.12em;
+            border: none;
+        }
+
+        td {
+            padding: 16px 14px;
+            border-bottom: 1px solid var(--hmb-light);
+            font-size: 0.95rem;
+            vertical-align: top;
+            color: var(--hmb-text);
+        }
+
+        tr:hover td {
+            background: var(--hmb-light-soft);
+        }
+
+        tr:last-child td {
+            border-bottom: none;
+        }
+
+        /* ---------- Action Buttons ---------- */
+        .action-btn {
+            padding: 7px 13px;
+            margin-right: 4px;
+            margin-bottom: 4px;
+            border: 1px solid;
+            border-radius: 0;
+            cursor: pointer;
+            font-family: 'Barlow', sans-serif;
+            font-weight: 700;
+            font-size: 0.7rem;
+            text-decoration: none;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            display: inline-block;
+            transition: all 0.2s ease;
+            line-height: 1.4;
+        }
+
+        .view-btn {
+            background: var(--hmb-orange);
+            color: #fff;
+            border-color: var(--hmb-orange);
+        }
+        .view-btn:hover {
+            background: #fff;
+            color: var(--hmb-orange);
+        }
+
+        .delete-btn {
+            background: #fff;
+            color: #c00000;
+            border-color: #c00000;
+        }
+        .delete-btn:hover {
+            background: #c00000;
+            color: #fff;
+        }
+
+        .download-btn {
+            background: var(--hmb-text);
+            color: #fff;
+            border-color: var(--hmb-text);
+        }
+        .download-btn:hover {
+            background: #fff;
+            color: var(--hmb-text);
+        }
+
+        .copy-btn {
+            background: #fff;
+            color: var(--hmb-text);
+            border-color: var(--hmb-gray-soft);
+        }
+        .copy-btn:hover {
+            background: var(--hmb-text);
+            color: #fff;
+            border-color: var(--hmb-text);
+        }
+
+        .regen-btn {
+            background: #fff;
+            color: var(--hmb-orange);
+            border-color: var(--hmb-orange);
+        }
+        .regen-btn:hover {
+            background: var(--hmb-orange);
+            color: #fff;
+        }
+
+        .revoke-btn {
+            background: #fff;
+            color: var(--hmb-gray);
+            border-color: var(--hmb-gray);
+        }
+        .revoke-btn:hover {
+            background: var(--hmb-gray);
+            color: #fff;
+        }
+
+        .issue-btn {
+            background: var(--hmb-orange);
+            color: #fff;
+            border-color: var(--hmb-orange);
+        }
+        .issue-btn:hover {
+            background: #fff;
+            color: var(--hmb-orange);
+        }
+
+        /* ---------- Finalisierungs-Toggle ---------- */
+        .finalize-toggle {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-top: 10px;
+            font-size: 0.8rem;
+            color: var(--hmb-text);
+            cursor: pointer;
+            user-select: none;
+        }
+        .finalize-toggle input {
+            cursor: pointer;
+            width: 16px;
+            height: 16px;
+        }
+        .finalize-toggle .finalize-state {
+            font-weight: 700;
+        }
+        .finalize-toggle .finalize-state.is-on {
+            color: #2e7d32;
+        }
+        .finalize-toggle .finalize-state.is-off {
+            color: var(--hmb-gray);
+        }
+        .finalize-since {
+            display: block;
+            margin-top: 4px;
+            color: var(--hmb-gray);
+            font-size: 0.72rem;
+            font-style: italic;
+        }
+
+        /* ---------- Public Link Display ---------- */
+        .public-link {
+            display: inline-block;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.8rem;
+            color: var(--hmb-text);
+            background: var(--hmb-light-soft);
+            padding: 7px 10px;
+            border-left: 3px solid var(--hmb-orange);
+            max-width: 100%;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            vertical-align: middle;
+        }
+
+        .token-cell {
+            min-width: 280px;
+            max-width: 360px;
+        }
+
+        .token-status {
+            color: var(--hmb-gray);
+            font-size: 0.8rem;
+            font-style: italic;
+            margin-bottom: 6px;
+        }
+
+        .empty-state {
+            padding: 56px 32px;
+            text-align: center;
+            color: var(--hmb-gray);
+            background: var(--hmb-light-soft);
+            border: 1px dashed #ccc;
+            font-weight: 300;
+            font-size: 1.05rem;
+        }
+
+        /* ---------- Status / Fortschritt pro Eintrag ---------- */
+        .status-cell {
+            min-width: 240px;
+            max-width: 290px;
+        }
+
+        .status-group {
+            margin-top: 4px;
+        }
+
+        .status-group + .status-group {
+            margin-top: 10px;
+            padding-top: 10px;
+            border-top: 1px dashed var(--hmb-light);
+        }
+
+        .status-kind-label {
+            font-family: 'Barlow', sans-serif;
+            font-weight: 700;
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            color: var(--hmb-gray-dark);
+            margin-bottom: 2px;
+        }
+
+        .status-variant-expert .status-kind-label {
+            color: #2a5fa3;
+        }
+
+        .status-bar {
+            position: relative;
+            height: 8px;
+            background: var(--hmb-light);
+            margin: 6px 0 6px 0;
+            overflow: hidden;
+        }
+
+        .status-bar-fill {
+            position: absolute;
+            top: 0;
+            left: 0;
+            bottom: 0;
+            background: linear-gradient(90deg, var(--hmb-orange) 0%, var(--hmb-orange-light) 100%);
+            transition: width 0.25s ease;
+        }
+
+        .status-variant-expert .status-bar-fill {
+            background: linear-gradient(90deg, #2a5fa3 0%, #4d82c8 100%);
+        }
+
+        .status-bar-fill.is-complete {
+            background: linear-gradient(90deg, #2d7a3a 0%, #4ca561 100%);
+        }
+
+        .status-variant-expert .status-bar-fill.is-complete {
+            background: linear-gradient(90deg, #2d7a3a 0%, #4ca561 100%);
+        }
+
+        .status-bar-fill.is-empty {
+            background: #c00000;
+            opacity: 0.55;
+        }
+
+        /* Gesamtstatus „Word-Download bereit" — fasst beide Listen zusammen */
+        .status-download {
+            margin-top: 10px;
+            padding: 6px 8px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            border-radius: 3px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            line-height: 1.3;
+        }
+
+        .status-download.is-ready {
+            background: #eaf6ee;
+            color: #1f5a2c;
+            border-left: 3px solid #2d7a3a;
+        }
+
+        .status-download.is-not-ready {
+            background: #fff4e6;
+            color: #8a4b00;
+            border-left: 3px solid var(--hmb-orange);
+        }
+
+        .status-download-icon {
+            font-size: 1em;
+            flex-shrink: 0;
+        }
+
+        .status-line {
+            display: flex;
+            align-items: baseline;
+            justify-content: space-between;
+            gap: 8px;
+        }
+
+        .status-percent {
+            font-family: 'Barlow', sans-serif;
+            font-weight: 700;
+            font-size: 1rem;
+            color: var(--hmb-text);
+        }
+
+        .status-percent.is-complete {
+            color: #2d7a3a;
+        }
+
+        .status-percent.is-empty {
+            color: #c00000;
+        }
+
+        .status-label {
+            font-family: 'Barlow', sans-serif;
+            font-weight: 700;
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            color: var(--hmb-gray);
+        }
+
+        .status-label.is-complete { color: #2d7a3a; }
+        .status-label.is-empty    { color: #c00000; }
+        .status-label.is-partial  { color: var(--hmb-orange-dark); }
+
+        .status-detail {
+            font-size: 0.78rem;
+            color: var(--hmb-gray);
+            line-height: 1.4;
+            margin-top: 2px;
+        }
+
+        .status-missing-toggle {
+            display: inline-block;
+            margin-top: 4px;
+            font-size: 0.78rem;
+            color: var(--hmb-orange);
+            cursor: pointer;
+            border-bottom: 1px dotted var(--hmb-orange);
+            user-select: none;
+        }
+
+        .status-missing-toggle:hover {
+            color: var(--hmb-orange-dark);
+        }
+
+        .status-missing-list {
+            display: none;
+            margin-top: 8px;
+            padding: 8px 10px;
+            background: #fff5f5;
+            border-left: 2px solid #c00000;
+            font-size: 0.78rem;
+            line-height: 1.5;
+            color: var(--hmb-gray-dark);
+            max-height: 220px;
+            overflow-y: auto;
+        }
+
+        .status-missing-list.is-open {
+            display: block;
+        }
+
+        .status-missing-list li {
+            list-style: none;
+            padding: 2px 0;
+        }
+
+        /* ---------- Modal ---------- */
+        .custom-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(50,48,46,0.7);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+            padding: 24px;
+        }
+
+        .custom-modal.active { display: flex; }
+
+        .custom-modal-content {
+            background: #fff;
+            padding: 40px 36px;
+            border-top: 4px solid var(--hmb-orange);
+            max-width: 580px;
+            width: 100%;
+            box-shadow: var(--hmb-shadow-modal);
+        }
+
+        .custom-modal-content h3 {
+            margin: 0 0 16px 0;
+            color: var(--hmb-orange);
+            font-family: 'Barlow', sans-serif;
+            font-weight: 300;
+            font-size: 1.6rem;
+            letter-spacing: 0.02em;
+            text-transform: none;
+        }
+
+        .custom-modal-content p {
+            margin: 0 0 22px 0;
+            color: var(--hmb-text);
+            line-height: 1.5;
+            font-size: 0.95rem;
+        }
+
+        .modal-link {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 24px;
+        }
+
+        .modal-link input {
+            flex: 1;
+            padding: 12px 14px;
+            border: 1px solid var(--hmb-light);
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.85rem;
+            background: var(--hmb-light-soft);
+        }
+
+        .custom-modal-buttons {
+            display: flex;
+            gap: 10px;
+            justify-content: flex-end;
+            flex-wrap: wrap;
+        }
+
+        .custom-modal-buttons button {
+            padding: 11px 22px;
+            border: 2px solid;
+            border-radius: 0;
+            cursor: pointer;
+            font-family: 'Barlow', sans-serif;
+            font-weight: 700;
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            transition: all 0.2s ease;
+        }
+
+        .custom-modal-buttons .confirm-btn {
+            background: #c00000;
+            color: #fff;
+            border-color: #c00000;
+        }
+        .custom-modal-buttons .confirm-btn:hover {
+            background: #fff;
+            color: #c00000;
+        }
+
+        .custom-modal-buttons .cancel-btn {
+            background: #fff;
+            color: var(--hmb-gray);
+            border-color: var(--hmb-gray);
+        }
+        .custom-modal-buttons .cancel-btn:hover {
+            background: var(--hmb-gray);
+            color: #fff;
+        }
+
+        .custom-modal-buttons .primary-btn {
+            background: var(--hmb-orange) !important;
+            color: #fff !important;
+            border-color: var(--hmb-orange) !important;
+        }
+        .custom-modal-buttons .primary-btn:hover {
+            background: #fff !important;
+            color: var(--hmb-orange) !important;
+        }
+
+        /* ---------- Toast ---------- */
+        .custom-toast {
+            position: fixed;
+            bottom: 28px;
+            right: 28px;
+            background: var(--hmb-text);
+            color: #fff;
+            padding: 16px 24px;
+            z-index: 1001;
+            font-family: 'Barlow', sans-serif;
+            font-weight: 400;
+            font-size: 0.95rem;
+            border-left: 4px solid var(--hmb-orange);
+            box-shadow: 0 8px 24px rgba(0,0,0,0.25);
+            animation: slideIn 0.3s ease;
+            max-width: 90%;
+        }
+
+        @keyframes slideIn {
+            from { transform: translateX(110%); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
+        }
+
+        /* ---------- Footer ---------- */
+        .site-footer {
+            background: var(--hmb-gray);
+            color: #fff;
+            padding: 36px 32px;
+            text-align: center;
+            font-size: 0.9rem;
+            font-weight: 300;
+            letter-spacing: 0.02em;
+            margin-top: 48px;
+        }
+
+        .site-footer-inner {
+            max-width: 1280px;
+            margin: 0 auto;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .site-footer a {
+            color: #fff;
+            text-decoration: none;
+            border-bottom: 1px solid transparent;
+            transition: border-color 0.2s ease;
+        }
+
+        .site-footer a:hover {
+            color: var(--hmb-orange);
+            border-bottom-color: var(--hmb-orange);
+        }
+
+        .site-footer-brand {
+            font-weight: 500;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+        }
+
+        .site-footer-brand .accent {
+            color: var(--hmb-orange);
+        }
+
+        /* ---------- Responsive ---------- */
+        @media (max-width: 980px) {
+            .container { padding: 32px 24px; }
+            h1 { font-size: 2rem; }
+            h2 { font-size: 1.4rem; }
+            main { padding: 32px 16px; }
+            .site-header-inner { padding: 14px 20px; }
+            .brand-logo { height: 44px; }
+            .brand-divider { display: none; }
+            .brand-meta { display: none; }
+            .controls { padding: 16px; }
+            .controls > div { width: 100%; }
+            .form-name-input { width: 100%; }
+            table { font-size: 0.85rem; }
+            th, td { padding: 10px 8px; }
+        }
+    </style>
+</head>
+<body>
+    <header class="site-header">
+        <div class="site-header-inner">
+            <a class="brand" href="/">
+                <svg class="brand-logo" xmlns="http://www.w3.org/2000/svg" width="149" height="100" viewBox="-3.205 -1.771 149 100" aria-label="hmb gmbh ingenieure"><path fill="#757373" d="M2.147 82.786H.537v9.921h1.61v-9.921zM.438 80.252h1.808v-1.729H.438v1.729zm18.321 12.455v-6.875c0-1.965-.53-3.242-2.652-3.242-1.276 0-2.023.354-2.651 1.474h-.079v-1.277h-1.709c.06.688.098 1.376.098 2.063v7.857h1.611v-5.874c0-1.355.256-2.927 2.023-2.927 1.375 0 1.749.864 1.749 1.926v6.875h1.61zm14.851-5.01c0 1.376.059 3.674-1.887 3.674-1.198 0-1.925-.746-1.925-3.929 0-1.316.059-3.517 1.886-3.517 2.024.001 1.926 2.299 1.926 3.772zm-.04-3.693h-.039c-.452-.962-1.277-1.414-2.318-1.414-.805 0-3.104.295-3.104 4.853 0 2.946.53 5.265 3.222 5.265.864 0 1.768-.452 2.181-1.237h.059v2.063c0 1.021-.608 1.709-1.729 1.709-.884 0-1.493-.511-1.513-1.434h-1.808c-.137 1.826 1.355 2.651 3.006 2.651 2.181 0 3.654-.53 3.654-2.75V82.786H33.57v1.218zm12.819 3.046c.02-2.751.864-3.241 1.886-3.241 1.179 0 1.984.354 1.984 3.241h-3.87zm5.579 1.217v-.844c0-3.281-.707-4.833-3.536-4.833-3.438 0-3.771 2.396-3.771 5.304 0 4.381 1.67 5.01 3.771 5.01 2.082 0 3.438-1.002 3.457-3.202h-1.768c-.06 1.002-.629 1.887-1.729 1.887-1.258 0-2.004-.551-2.004-3.321h5.58v-.001zm16.423 4.44v-6.875c0-1.965-.53-3.242-2.652-3.242-1.277 0-2.023.354-2.652 1.474h-.078v-1.277H61.3c.059.688.098 1.376.098 2.063v7.857h1.611v-5.874c0-1.355.255-2.927 2.023-2.927 1.375 0 1.748.864 1.748 1.926v6.875h1.611zm11.197-9.921h-1.611v9.921h1.611v-9.921zm-1.709-2.534h1.807v-1.729h-1.807v1.729zm12.819 6.798c.02-2.751.864-3.241 1.886-3.241 1.179 0 1.984.354 1.984 3.241h-3.87zm5.579 1.217v-.844c0-3.281-.707-4.833-3.536-4.833-3.438 0-3.771 2.396-3.771 5.304 0 4.381 1.669 5.01 3.771 5.01 2.082 0 3.438-1.002 3.457-3.202H94.43c-.059 1.002-.628 1.887-1.729 1.887-1.258 0-2.004-.551-2.004-3.321h5.58v-.001zm14.704 1.1c0 1.65-1.081 2.299-1.945 2.299-1.139 0-1.689-.806-1.689-2.004v-6.876h-1.611v7.563c0 1.689.943 2.554 2.672 2.554 1.042 0 1.984-.491 2.515-1.395h.06v1.198h1.709a23.737 23.737 0 0 1-.099-2.063v-7.858h-1.61v6.582h-.002zm12.93-6.581h-1.61v9.921h1.61v-5.854c0-1.337.452-2.691 2.239-2.691.294 0 .569.059.864.098v-1.67c-1.571 0-2.396.177-3.064 1.689h-.039v-1.493zm13.35 4.264c.02-2.751.864-3.241 1.887-3.241 1.178 0 1.983.354 1.983 3.241h-3.87zm5.579 1.217v-.844c0-3.281-.707-4.833-3.535-4.833-3.438 0-3.772 2.396-3.772 5.304 0 4.381 1.671 5.01 3.772 5.01 2.082 0 3.437-1.002 3.457-3.202h-1.769c-.059 1.002-.628 1.887-1.729 1.887-1.257 0-2.004-.551-2.004-3.321h5.58v-.001zM92.53 72.254V45.557c0-6.587-1.412-11.488-4.236-14.698-2.824-3.213-6.426-4.821-10.798-4.821-5.193 0-10.173 2.773-14.941 8.315-3.149-5.542-7.592-8.315-13.33-8.315-4.364 0-8.825 2.331-13.384 6.988l-.51.461c-1.131-1.987-2.386-3.857-4.327-5.085-2.39-1.509-5.092-2.268-8.101-2.268-5.532 0-10.165 2.261-13.895 6.776L8.9.084C5.847 1.266 2.936 2.631 0 4.033l.107 68.315h8.901V39.783c2.097-2.357 4.013-4.042 5.752-5.058 1.738-1.014 3.59-1.521 5.559-1.521 2.655 0 4.791 1.015 6.416 3.037 1.622 2.024 2.437 4.697 2.437 8.021v28.087h8.901V46.532c0-3.372-.328-6.012-.807-8.315 1.377-1.364 2.766-2.763 3.906-3.402 1.555-.876 3.268-1.315 5.136-1.315 3.339 0 5.683.994 7.026 2.984 1.341 1.987 2.014 5.498 2.014 10.527v25.243h9.035V39.458c3.197-3.798 6.642-5.695 10.333-5.695 2.87 0 5.077 1 6.609 3.003 1.535 2 2.302 4.887 2.302 8.664v26.824h8.903z"/><path fill="#F28C00" d="M142.633 49.523c0-17.587-10.318-23.327-17.942-23.327-6.283 0-11.575 3.409-13.906 7.266h-.182l-.008-29.585c-2.927-1.388-5.843-2.707-8.884-3.877l.159 72.132h8.358l-.073-4.577h.179c2.334 3.142 6.818 5.832 12.74 5.832 11.484 0 19.559-11.843 19.559-23.864zm-7.717.267c0 8.882-5.474 17.675-13.367 17.675-4.306 0-8.076-2.333-11.215-7.178l.18-19.916c2.154-3.769 6.82-8.254 12.561-8.254 6.19 0 11.841 5.564 11.841 17.673z"/></svg>
+                <span class="brand-divider"></span>
+                <span class="brand-meta">
+                    <span class="brand-meta-eyebrow">Gutachten zur Restnutzungsdauer</span>
+                    <span class="brand-meta-title">Verwaltung</span>
+                </span>
+            </a>
+            <nav class="site-nav">
+                <span class="site-nav-pill">Admin-Bereich</span>
+            </nav>
+        </div>
+    </header>
+
+    <main>
+        <div class="container">
+            <h1>Gutachten-Verwaltung</h1>
+            <p class="subtitle">Gutachten zur Restnutzungsdauer · Admin-Bereich</p>
+            <span class="title-rule"></span>
+
+            <div class="controls">
+                <div>
+                    <input type="text" id="formNameInput" class="form-name-input" placeholder="Formularname eingeben">
+                    <button id="newFormBtn" class="new-form-btn" disabled>+ Neues Formular anlegen</button>
+                </div>
+            </div>
+
+            <div class="submission-list">
+                <h3>Einträge</h3>
+                <div id="submission_list">
+                    <div class="empty-state">Lade Einträge...</div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <div id="confirmModal" class="custom-modal">
+        <div class="custom-modal-content">
+            <h3>Bestätigen</h3>
+            <p id="confirmMessage"></p>
+            <div class="custom-modal-buttons">
+                <button id="confirmCancel" class="cancel-btn">Abbrechen</button>
+                <button id="confirmConfirm" class="confirm-btn">Bestätigen</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="linkModal" class="custom-modal">
+        <div class="custom-modal-content">
+            <h3 id="linkModalTitle">Öffentlicher Link</h3>
+            <p id="linkModalDescription">
+                Geben Sie diesen Link Ihrem Kunden weiter. Über diesen Link kann der Kunde nur das Formular ausfüllen und absenden — er kann weder andere Formulare sehen noch das Word-Dokument herunterladen.
+            </p>
+            <div class="modal-link">
+                <input type="text" id="linkModalUrl" readonly>
+                <button id="linkModalCopy" class="action-btn copy-btn">Kopieren</button>
+            </div>
+            <div class="custom-modal-buttons">
+                <button id="linkModalOpenForm" class="primary-btn">Formular öffnen</button>
+                <button id="linkModalClose" class="cancel-btn">Schließen</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="/frontend-utils.js"></script>
+    <script>
+        const API_URL = window.location.origin;
+
+        function formatDate(value) {
+            if (!value) return '–';
+            try {
+                return new Date(value).toLocaleString('de-DE');
+            } catch (e) {
+                return String(value);
+            }
+        }
+
+        async function loadSubmissionList(options = {}) {
+            const { silent = false } = options;
+            try {
+                const response = await fetch(`${API_URL}/api/admin/list`);
+                if (response.status === 401) {
+                    if (!silent) {
+                        document.getElementById('submission_list').innerHTML = '<div class="empty-state" style="color: #c00000;">Nicht angemeldet. Bitte Seite neu laden und Login eingeben.</div>';
+                    }
+                    return;
+                }
+                const data = await response.json();
+
+                if (!response.ok) {
+                    if (!silent) showToast(`Fehler: ${data.error}`, 'error');
+                    return;
+                }
+
+                const listDiv = document.getElementById('submission_list');
+
+                if (data.submissions.length === 0) {
+                    listDiv.innerHTML = '<div class="empty-state">Keine Einträge vorhanden. Erstellen Sie ein neues Formular!</div>';
+                    return;
+                }
+
+                let html = '<table><thead><tr>';
+                html += '<th>Formularname</th>';
+                html += '<th>Status</th>';
+                html += '<th>Erstellt</th>';
+                html += '<th>Aktualisiert</th>';
+                html += '<th>Klient-Link</th>';
+                html += '<th>Aktionen</th>';
+                html += '</tr></thead><tbody>';
+
+                data.submissions.forEach(sub => {
+                    const safeName = escapeHtml(sub.formularName);
+                    const encodedName = encodeURIComponent(sub.formularName);
+                    const tokenCell = renderTokenCell(sub);
+                    const statusCell = renderStatusCell(sub);
+                    html += '<tr>';
+                    html += `<td style="font-family: 'JetBrains Mono', monospace; font-weight: 500;">${safeName}</td>`;
+                    html += `<td class="status-cell">${statusCell}</td>`;
+                    html += `<td>${formatDate(sub.createdAt)}</td>`;
+                    html += `<td>${formatDate(sub.updatedAt)}</td>`;
+                    html += `<td class="token-cell">${tokenCell}</td>`;
+                    html += '<td>';
+                    html += `<a href="formular.html?formularName=${encodedName}" class="action-btn view-btn">Bearbeiten</a>`;
+                    html += `<a href="${API_URL}/api/admin/export-docx/${encodedName}" class="action-btn download-btn">Word herunterladen</a>`;
+                    html += `<button class="action-btn delete-btn" data-action="delete" data-name="${safeName}">Löschen</button>`;
+                    html += '</td></tr>';
+                });
+
+                html += '</tbody></table>';
+                listDiv.innerHTML = html;
+                attachRowHandlers();
+            } catch (error) {
+                console.error('List error:', error);
+                if (!silent) {
+                    document.getElementById('submission_list').innerHTML = '<div class="empty-state" style="color: #c00000;">Fehler beim Laden der Liste</div>';
+                }
+            }
+        }
+
+        // Rendert einen einzelnen Fortschritts-Block (Kunde oder Gutachter).
+        // kindLabel: Bezeichnung der Felder im Plural (z.B. "Pflichtangaben").
+        // variant: 'customer' (Default-Farbe) oder 'expert' (zweite Farbe).
+        function renderProgressBlock(p, kindLabel, variant) {
+            if (!p || typeof p.percent !== 'number') {
+                return `<div class="status-detail">${kindLabel}: Status nicht verfügbar</div>`;
+            }
+            const percent = Math.max(0, Math.min(100, p.percent));
+            const isComplete = !!p.isComplete;
+            const isEmpty = p.filled === 0;
+            const stateClass = isComplete ? 'is-complete' : (isEmpty ? 'is-empty' : 'is-partial');
+            const fillClass  = isComplete ? 'is-complete' : (isEmpty ? 'is-empty' : '');
+            const labelText  = isComplete ? 'Vollständig'
+                              : (isEmpty ? 'Leer'
+                              : `${p.missing.length} ${p.missing.length === 1 ? 'fehlt' : 'fehlen'}`);
+
+            const safeId = 'missing-' + variant + '-' + Math.random().toString(36).slice(2, 9);
+            const missingItems = (p.missing || []).map((m) => `<li>· ${escapeHtml(m.label || m.name)}</li>`).join('');
+            const detail = isComplete
+                ? `<div class="status-detail">Alle ${p.total} ${kindLabel} ausgefüllt.</div>`
+                : `<div class="status-detail">${p.filled} von ${p.total} ${kindLabel} ausgefüllt.</div>` +
+                  (p.missing && p.missing.length
+                      ? `<span class="status-missing-toggle" data-action="toggle-missing" data-target="${safeId}">Fehlende anzeigen</span>
+                         <ul id="${safeId}" class="status-missing-list">${missingItems}</ul>`
+                      : '');
+
+            const variantClass = variant === 'expert' ? ' status-variant-expert' : '';
+            return `
+                <div class="status-group${variantClass}">
+                    <div class="status-kind-label">${kindLabel}</div>
+                    <div class="status-line">
+                        <span class="status-percent ${stateClass}">${percent}%</span>
+                        <span class="status-label ${stateClass}">${labelText}</span>
+                    </div>
+                    <div class="status-bar" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="${percent}">
+                        <div class="status-bar-fill ${fillClass}" style="width:${percent}%"></div>
+                    </div>
+                    ${detail}
+                </div>
+            `;
+        }
+
+        function renderStatusCell(sub) {
+            const p = sub.progress;
+            const pe = sub.progressExpert;
+            if (!p || typeof p.percent !== 'number') {
+                return '<div class="status-detail">Status nicht verfügbar</div>';
+            }
+
+            const customerBlock = renderProgressBlock(p, 'Pflichtangaben', 'customer');
+            const expertBlock   = renderProgressBlock(pe, 'Gutachter-Angaben', 'expert');
+
+            // Gesamtstatus für Word-Download: beide Listen müssen vollständig sein.
+            const customerComplete = !!(p && p.isComplete);
+            const expertComplete   = !!(pe && pe.isComplete);
+            const allComplete = customerComplete && expertComplete;
+            const missingTotal = (p ? p.missing.length : 0) + (pe ? pe.missing.length : 0);
+            const downloadCls  = allComplete ? 'is-ready' : 'is-not-ready';
+            const downloadIcon = allComplete ? '✓' : '⚠';
+            const downloadText = allComplete
+                ? 'Word-Download bereit'
+                : `Word-Download: ${missingTotal} ${missingTotal === 1 ? 'Angabe fehlt' : 'Angaben fehlen'}`;
+
+            return `
+                ${customerBlock}
+                ${expertBlock}
+                <div class="status-download ${downloadCls}">
+                    <span class="status-download-icon" aria-hidden="true">${downloadIcon}</span>
+                    <span>${downloadText}</span>
+                </div>
+            `;
+        }
+
+        function renderFinalizeToggle(sub) {
+            const safeName = escapeHtml(sub.formularName);
+            const isFinalized = !!sub.finalized;
+            const stateClass = isFinalized ? 'is-on' : 'is-off';
+            const stateText = isFinalized ? 'gesperrt (read-only)' : 'offen (Klient kann bearbeiten)';
+            const since = isFinalized && sub.finalizedAt
+                ? `<span class="finalize-since">final abgeschickt: ${formatDate(sub.finalizedAt)}</span>`
+                : '';
+            return `
+                <label class="finalize-toggle" title="Wenn aktiviert, kann der Klient keine Änderungen mehr vornehmen.">
+                    <input type="checkbox" data-action="toggle-finalized" data-name="${safeName}" ${isFinalized ? 'checked' : ''}>
+                    <span>Klient-Sperren:</span>
+                    <span class="finalize-state ${stateClass}">${stateText}</span>
+                </label>
+                ${since}
+            `;
+        }
+
+        function renderTokenCell(sub) {
+            const safeName = escapeHtml(sub.formularName);
+            const finalizeToggle = renderFinalizeToggle(sub);
+            if (sub.publicUrl) {
+                const lastUsed = sub.tokenLastUsedAt
+                    ? `Zuletzt vom Klient geändert: ${formatDate(sub.tokenLastUsedAt)}`
+                    : 'Vom Klient noch nicht geändert';
+                return `
+                    <div class="token-status">${lastUsed}</div>
+                    <span class="public-link" title="${escapeHtml(sub.publicUrl)}">${escapeHtml(sub.publicUrl)}</span>
+                    <div style="margin-top:8px;">
+                        <button class="action-btn copy-btn" data-action="copy" data-url="${escapeHtml(sub.publicUrl)}">Link kopieren</button>
+                        <button class="action-btn regen-btn" data-action="regenerate" data-name="${safeName}" title="Alten Link ungültig machen, neuen Link erzeugen">Neuer Link</button>
+                        <button class="action-btn revoke-btn" data-action="revoke" data-name="${safeName}" title="Klient kann nichts mehr ändern">Link widerrufen</button>
+                    </div>
+                    ${finalizeToggle}
+                `;
+            }
+            return `
+                <div class="token-status">Kein öffentlicher Link aktiv</div>
+                <button class="action-btn issue-btn" data-action="issue" data-name="${safeName}">Link erstellen</button>
+                ${finalizeToggle}
+            `;
+        }
+
+        function attachRowHandlers() {
+            document.querySelectorAll('[data-action="toggle-finalized"]').forEach((cb) => {
+                cb.addEventListener('change', () => {
+                    const name = cb.getAttribute('data-name');
+                    setFinalized(name, cb.checked, cb);
+                });
+            });
+            document.querySelectorAll('[data-action]:not([data-action="toggle-finalized"])').forEach((btn) => {
+                btn.addEventListener('click', async () => {
+                    const action = btn.getAttribute('data-action');
+                    const name = btn.getAttribute('data-name');
+                    const url = btn.getAttribute('data-url');
+                    if (action === 'delete') {
+                        return deleteSubmission(name);
+                    }
+                    if (action === 'issue') {
+                        return issueToken(name);
+                    }
+                    if (action === 'regenerate') {
+                        return regenerateToken(name);
+                    }
+                    if (action === 'revoke') {
+                        return revokeToken(name);
+                    }
+                    if (action === 'copy') {
+                        return copyToClipboard(url);
+                    }
+                    if (action === 'toggle-missing') {
+                        const targetId = btn.getAttribute('data-target');
+                        const list = document.getElementById(targetId);
+                        if (!list) return;
+                        const willOpen = !list.classList.contains('is-open');
+                        list.classList.toggle('is-open', willOpen);
+                        btn.textContent = willOpen ? 'Fehlende ausblenden' : 'Fehlende anzeigen';
+                        return;
+                    }
+                });
+            });
+        }
+
+        async function copyToClipboard(text) {
+            try {
+                await navigator.clipboard.writeText(text);
+                showToast('Link in die Zwischenablage kopiert');
+            } catch (e) {
+                const tmp = document.createElement('textarea');
+                tmp.value = text;
+                document.body.appendChild(tmp);
+                tmp.select();
+                try { document.execCommand('copy'); } catch (e2) {}
+                document.body.removeChild(tmp);
+                showToast('Link in die Zwischenablage kopiert');
+            }
+        }
+
+        async function requestNewToken(formularName, modalConfig) {
+            try {
+                const response = await fetch(`${API_URL}/api/admin/forms/${encodeURIComponent(formularName)}/token`, {
+                    method: 'POST'
+                });
+                const data = await response.json();
+                if (!response.ok) {
+                    showToast(`Fehler: ${data.error}`, 'error');
+                    return;
+                }
+                showLinkModal({
+                    title: modalConfig.title,
+                    description: modalConfig.description,
+                    publicUrl: data.publicUrl,
+                    formularName: data.formularName
+                });
+                loadSubmissionList();
+            } catch (error) {
+                console.error('Token request error:', error);
+                showToast('Token konnte nicht erstellt werden', 'error');
+            }
+        }
+
+        function issueToken(formularName) {
+            return requestNewToken(formularName, {
+                title: 'Öffentlicher Link erstellt',
+                description: 'Geben Sie diesen Link an Ihren Kunden weiter. Der Kunde kann nur seine Angaben ausfüllen — die Übersicht und der Word-Export bleiben Ihnen vorbehalten. Alle Eingaben werden automatisch gespeichert.'
+            });
+        }
+
+        function regenerateToken(formularName) {
+            return requestNewToken(formularName, {
+                title: 'Neuer öffentlicher Link',
+                description: 'Der bisherige Link ist ab sofort ungültig. Geben Sie diesen neuen Link an Ihren Kunden weiter.'
+            });
+        }
+
+        async function setFinalized(formularName, finalized, sourceEl) {
+            try {
+                const response = await fetch(`${API_URL}/api/admin/forms/${encodeURIComponent(formularName)}/finalized`, {
+                    method: 'PUT',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ finalized: !!finalized })
+                });
+                const data = await response.json().catch(() => ({}));
+                if (!response.ok) {
+                    showToast(`Fehler: ${data.error || response.statusText}`, 'error');
+                    if (sourceEl) sourceEl.checked = !finalized;
+                    return;
+                }
+                showToast(finalized
+                    ? 'Klient-Eingaben gesperrt (read-only).'
+                    : 'Klient-Eingaben wieder freigegeben.');
+                loadSubmissionList();
+            } catch (error) {
+                console.error('Finalize toggle error:', error);
+                showToast('Status konnte nicht geändert werden: ' + error.message, 'error');
+                if (sourceEl) sourceEl.checked = !finalized;
+            }
+        }
+
+        async function revokeToken(formularName) {
+            confirmAction(`Den öffentlichen Link für "${formularName}" widerrufen? Der Klient kann dann nichts mehr ändern.`, async () => {
+                try {
+                    const response = await fetch(`${API_URL}/api/admin/forms/${encodeURIComponent(formularName)}/token`, {
+                        method: 'DELETE'
+                    });
+                    const data = await response.json();
+                    if (!response.ok) {
+                        showToast(`Fehler: ${data.error}`, 'error');
+                        return;
+                    }
+                    showToast('Link widerrufen');
+                    loadSubmissionList();
+                } catch (error) {
+                    console.error('Revoke error:', error);
+                    showToast('Token konnte nicht widerrufen werden', 'error');
+                }
+            });
+        }
+
+        async function deleteSubmission(formularName) {
+            confirmAction(`Möchten Sie den Eintrag "${formularName}" wirklich löschen? Dies kann nicht rückgängig gemacht werden.`, async () => {
+                try {
+                    const response = await fetch(`${API_URL}/api/admin/delete/${encodeURIComponent(formularName)}`, {
+                        method: 'DELETE'
+                    });
+                    if (response.ok) {
+                        showToast('Eintrag erfolgreich gelöscht');
+                    } else {
+                        const data = await response.json().catch(() => ({}));
+                        showToast(`Fehler: ${data.error || response.statusText}`, 'error');
+                    }
+                    loadSubmissionList();
+                } catch (error) {
+                    console.error('Delete error:', error);
+                    showToast('Fehler beim Löschen: ' + error.message, 'error');
+                }
+            });
+        }
+
+        function showLinkModal({ title, description, publicUrl, formularName }) {
+            const modal = document.getElementById('linkModal');
+            document.getElementById('linkModalTitle').textContent = title || 'Öffentlicher Link';
+            if (description) {
+                document.getElementById('linkModalDescription').textContent = description;
+            }
+            const input = document.getElementById('linkModalUrl');
+            input.value = publicUrl;
+            document.getElementById('linkModalCopy').onclick = () => copyToClipboard(publicUrl);
+            document.getElementById('linkModalOpenForm').onclick = () => {
+                window.location.href = `formular.html?formularName=${encodeURIComponent(formularName)}`;
+            };
+            document.getElementById('linkModalClose').onclick = () => modal.classList.remove('active');
+            modal.classList.add('active');
+            input.focus();
+            input.select();
+        }
+
+        document.getElementById('formNameInput').addEventListener('input', function(e) {
+            document.getElementById('newFormBtn').disabled = !e.target.value.trim();
+        });
+
+        document.getElementById('formNameInput').addEventListener('keydown', function(e) {
+            if (e.key === 'Enter') {
+                e.preventDefault();
+                document.getElementById('newFormBtn').click();
+            }
+        });
+
+        document.getElementById('newFormBtn').addEventListener('click', async function() {
+            const formName = document.getElementById('formNameInput').value.trim();
+            if (!formName) return;
+            try {
+                const response = await fetch(`${API_URL}/api/admin/forms`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ formularName: formName })
+                });
+                const data = await response.json();
+                if (!response.ok) {
+                    if (response.status === 409) {
+                        showToast('Dieser Formularname ist bereits vergeben', 'error');
+                    } else {
+                        showToast(`Fehler: ${data.error || response.statusText}`, 'error');
+                    }
+                    return;
+                }
+                document.getElementById('formNameInput').value = '';
+                document.getElementById('newFormBtn').disabled = true;
+                showLinkModal({
+                    title: 'Formular angelegt',
+                    description: 'Geben Sie diesen Link an Ihren Kunden weiter. Der Kunde kann nur seine Angaben ausfüllen — die Übersicht und der Word-Export bleiben Ihnen vorbehalten. Alle Eingaben werden automatisch gespeichert.',
+                    publicUrl: data.publicUrl,
+                    formularName: data.formularName
+                });
+                loadSubmissionList();
+            } catch (error) {
+                console.error('Create form error:', error);
+                showToast('Formular konnte nicht erstellt werden: ' + error.message, 'error');
+            }
+        });
+
+        const POLL_INTERVAL_MS = 5000;
+
+        window.addEventListener('load', () => {
+            loadSubmissionList();
+            setInterval(() => {
+                if (document.visibilityState === 'visible') {
+                    loadSubmissionList({ silent: true });
+                }
+            }, POLL_INTERVAL_MS);
+        });
+
+        document.addEventListener('visibilitychange', () => {
+            if (document.visibilityState === 'visible') {
+                loadSubmissionList({ silent: true });
+            }
+        });
+    </script>
+</body>
+</html>

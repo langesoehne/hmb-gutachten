@@ -1,0 +1,9 @@
+data
+node_modules
+package-lock.json
+.env
+*.backup-*
+*.backup-*.docx
+*.bak
+*.bak-*
+*.bak.*

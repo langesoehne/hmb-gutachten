@@ -1,0 +1,37 @@
+{
+  "name": "form-data-storage-backend",
+  "version": "1.0.0",
+  "description": "Node.js/Express backend with built-in SQLite for form data storage",
+  "main": "server.js",
+  "scripts": {
+    "start": "node --experimental-sqlite server.js",
+    "dev": "node --experimental-sqlite --watch server.js",
+    "lint": "eslint .",
+    "lint:fix": "eslint . --fix",
+    "test": "node --experimental-sqlite --test 'test/**/*.test.js'"
+  },
+  "keywords": [
+    "express",
+    "sqlite",
+    "form-storage",
+    "api"
+  ],
+  "license": "MIT",
+  "engines": {
+    "node": ">=22.5.0"
+  },
+  "dependencies": {
+    "cors": "^2.8.5",
+    "docxtemplater": "^3.68.3",
+    "dotenv": "^16.4.7",
+    "express": "^4.21.2",
+    "multer": "^2.0.0",
+    "pizzip": "^3.2.0",
+    "uuid": "^11.1.0"
+  },
+  "devDependencies": {
+    "@eslint/js": "^10.0.1",
+    "eslint": "^10.3.0",
+    "globals": "^17.6.0"
+  }
+}
