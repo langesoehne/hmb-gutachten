@@ -757,21 +757,6 @@ async function loadCurrentForm(options = {}) {
         const formData = data.data || {};
         form.reset();
 
-        // Migration alter Checkbox-Werte auf neue ja/nein-Radios.
-        // Why: Vorhandene Submissions speicherten z.B. bauart_dach='zusaetzlich_gedaemmt';
-        // ohne Mapping würde der Wert nach UI-Umstellung nicht mehr matchen und still verloren gehen.
-        const fassadeAlt = formData.bauart_fassade;
-        if (fassadeAlt !== undefined) {
-            const arr = Array.isArray(fassadeAlt) ? fassadeAlt : [fassadeAlt];
-            if (arr.includes('zusaetzliche_daemmung')) formData.bauart_fassade_daemmung = 'ja';
-            if (arr.includes('putz')) formData.bauart_fassade_putz = 'ja';
-            if (arr.includes('verkleidung')) formData.bauart_fassade_verkleidung = 'ja';
-            delete formData.bauart_fassade;
-        }
-        if (formData.bauart_kellerdecke === 'gedaemmt') formData.bauart_kellerdecke = 'ja';
-        if (formData.bauart_dach === 'zusaetzlich_gedaemmt') formData.bauart_dach = 'ja';
-        if (formData.bauart_fenster_verglasung === '2fach') formData.bauart_fenster_verglasung = 'ja';
-
         Object.keys(formData).forEach(key => {
             const elements = form.querySelectorAll(`[name="${CSS.escape(key)}"]`);
             if (formData[key] instanceof Array) {
