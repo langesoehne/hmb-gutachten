@@ -754,19 +754,36 @@
 
                 <div class="bauart-row-group admin-only">
                     <div class="bauart-row">
-                        <div class="bauart-label">Innenwände</div>
+                        <div class="bauart-label">Innenwände EG – DG</div>
                         <div class="bauart-options">
                             <div class="bauart-option">
-                                <input type="radio" name="bauart_innenwand" value="trockenbau" id="bauart_innenwand_trockenbau">
-                                <label for="bauart_innenwand_trockenbau">Trockenbau</label>
+                                <input type="radio" name="bauart_innenwand_eg" value="trockenbau" id="bauart_innenwand_eg_trockenbau">
+                                <label for="bauart_innenwand_eg_trockenbau">Trockenbau</label>
                             </div>
                             <div class="bauart-option">
-                                <input type="radio" name="bauart_innenwand" value="mauerwerk" id="bauart_innenwand_mauerwerk">
-                                <label for="bauart_innenwand_mauerwerk">Mauerwerk</label>
+                                <input type="radio" name="bauart_innenwand_eg" value="mauerwerk" id="bauart_innenwand_eg_mauerwerk">
+                                <label for="bauart_innenwand_eg_mauerwerk">Mauerwerk</label>
                             </div>
                             <div class="bauart-option">
-                                <input type="radio" name="bauart_innenwand" value="holztafel" id="bauart_innenwand_holztafel">
-                                <label for="bauart_innenwand_holztafel">Holztafelbauweise</label>
+                                <input type="radio" name="bauart_innenwand_eg" value="holztafel" id="bauart_innenwand_eg_holztafel">
+                                <label for="bauart_innenwand_eg_holztafel">Holztafelbauweise</label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="bauart-row">
+                        <div class="bauart-label">Innenwände UG</div>
+                        <div class="bauart-options">
+                            <div class="bauart-option">
+                                <input type="radio" name="bauart_innenwand_ug" value="trockenbau" id="bauart_innenwand_ug_trockenbau">
+                                <label for="bauart_innenwand_ug_trockenbau">Trockenbau</label>
+                            </div>
+                            <div class="bauart-option">
+                                <input type="radio" name="bauart_innenwand_ug" value="mauerwerk" id="bauart_innenwand_ug_mauerwerk">
+                                <label for="bauart_innenwand_ug_mauerwerk">Mauerwerk</label>
+                            </div>
+                            <div class="bauart-option">
+                                <input type="radio" name="bauart_innenwand_ug" value="holztafel" id="bauart_innenwand_ug_holztafel">
+                                <label for="bauart_innenwand_ug_holztafel">Holztafelbauweise</label>
                             </div>
                         </div>
                     </div>
@@ -825,9 +842,19 @@
 
                 <div class="bauart-row-group admin-only">
                     <div class="bauart-row">
-                        <div class="bauart-label">Innenwände — Zusatz (z.B. nichttragend Trockenbau)</div>
-                        <div class="bauart-options" style="flex:1;">
-                            <input type="text" name="innenwand_zusatz" style="width: 100%;" placeholder="z.B.: nichttragend, Trockenbau, >11,5cm dick">
+                        <div class="bauart-label">Innenwand-Stärke tragend</div>
+                        <div class="bauart-options">
+                            <div class="bauart-option"><input type="radio" name="bauart_innenwand_dicke_tragend" value=">24cm" id="iwdt_gross"><label for="iwdt_gross">&gt;24cm</label></div>
+                            <div class="bauart-option"><input type="radio" name="bauart_innenwand_dicke_tragend" value="11,5-24cm" id="iwdt_mid"><label for="iwdt_mid">11,5–24cm</label></div>
+                            <div class="bauart-option"><input type="radio" name="bauart_innenwand_dicke_tragend" value="<11,5cm" id="iwdt_klein"><label for="iwdt_klein">&lt;11,5cm</label></div>
+                        </div>
+                    </div>
+                    <div class="bauart-row">
+                        <div class="bauart-label">Innenwand-Stärke nichttragend</div>
+                        <div class="bauart-options">
+                            <div class="bauart-option"><input type="radio" name="bauart_innenwand_dicke_nichttragend" value=">24cm" id="iwdn_gross"><label for="iwdn_gross">&gt;24cm</label></div>
+                            <div class="bauart-option"><input type="radio" name="bauart_innenwand_dicke_nichttragend" value="11,5-24cm" id="iwdn_mid"><label for="iwdn_mid">11,5–24cm</label></div>
+                            <div class="bauart-option"><input type="radio" name="bauart_innenwand_dicke_nichttragend" value="<11,5cm" id="iwdn_klein"><label for="iwdn_klein">&lt;11,5cm</label></div>
                         </div>
                     </div>
                 </div>
