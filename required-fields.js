@@ -93,7 +93,7 @@
         { name: 'bauart_fassade_putz',         label: 'Fassade — Putz',                  section: 'bauart', type: 'radio' },
         { name: 'bauart_fassade_verkleidung',  label: 'Fassade — Verkleidung',           section: 'bauart', type: 'radio' },
         { name: 'bauart_innenwand',            label: 'Innenwände',                      section: 'bauart', type: 'radio' },
-        { name: 'bauart_decke',                label: 'Decken',                          section: 'bauart', type: 'radio' },
+        { name: 'bauart_decke',                label: 'Decke UG (Kellerdecke)',          section: 'bauart', type: 'radio' },
         { name: 'bauart_kellerdecke',          label: 'Kellerdecke gedämmt',             section: 'bauart', type: 'radio' },
         { name: 'bauart_dach',                 label: 'Dach / Spitzboden gedämmt',       section: 'bauart', type: 'radio' },
         { name: 'bauart_dacheindeckung',       label: 'Dacheindeckung',                  section: 'bauart', type: 'radio' },
