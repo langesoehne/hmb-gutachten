@@ -43,6 +43,11 @@
             <button type="button" class="toggle-all-btn" onclick="toggleAllSections('collapse')">▸ Alle einklappen</button>
         </div>
 
+        <div id="autoSaveStatus" class="auto-save-status" data-state="saved" aria-live="polite">
+            <span class="auto-save-icon" aria-hidden="true">✓</span>
+            <span class="auto-save-text">Alle Änderungen werden automatisch gespeichert.</span>
+        </div>
+
         <div id="progressWidget" class="progress-widget" aria-live="polite">
             <div class="progress-widget-header">
                 <span class="progress-widget-title">Fortschritt der Pflichtangaben</span>
@@ -58,10 +63,6 @@
             <div id="progressMissing" class="progress-missing" hidden>
                 <span class="progress-missing-label">Fehlt noch:</span>
                 <span id="progressMissingList"></span>
-            </div>
-            <div id="autoSaveStatus" class="auto-save-status" data-state="saved" aria-live="polite">
-                <span class="auto-save-icon" aria-hidden="true">✓</span>
-                <span class="auto-save-text">Alle Änderungen werden automatisch gespeichert.</span>
             </div>
         </div>
 
