@@ -71,6 +71,7 @@
         { name: 'stichtag',                 label: 'Stichtag',                       section: 'metadaten' },
         { name: 'auftragsdatum',            label: 'Auftragsdatum',                  section: 'metadaten' },
         { name: 'ortsbesichtigungsdatum',   label: 'Ortsbesichtigung am',            section: 'metadaten' },
+        { name: 'unterschriftsdatum',       label: 'Unterschriftsdatum',             section: 'metadaten' },
 
         // Liegenschaft (Grundbuch-Daten — Sachverständiger recherchiert über Geoindex)
         { name: 'flur',                     label: 'Flur',                           section: 'objekt' },

@@ -2,7 +2,6 @@ const express = require('express');
 const cors = require('cors');
 const { PORT, HOST, DB_PATH, CORS_ORIGIN } = require('./config');
 const { db } = require('./db');
-const { handleMulterError } = require('./lib/uploads');
 const publicRoutes = require('./routes/public');
 const toolsRoutes = require('./routes/tools');
 const adminRoutes = require('./routes/admin');
@@ -18,8 +17,6 @@ app.use(cors({
   methods: ['GET', 'POST', 'PUT', 'DELETE'],
   allowedHeaders: ['Content-Type', 'Authorization']
 }));
-
-app.use(handleMulterError);
 
 app.use(publicRoutes);
 app.use(toolsRoutes);

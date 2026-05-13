@@ -42,8 +42,7 @@ Optional:
 | `DB_PATH` | `./data/form_storage.db` | |
 | `DOCX_TEMPLATE_PATH` | `./templates/gutachten_template.docx` | |
 | `MAX_FILE_SIZE` | `10485760` (10 MB) | |
-| `CORS_ORIGIN` | `*` | |
-| `SACHVERSTAENDIGER_ORT` | `München` | Ort des Sachverständigen — wird im Word-Export im Anschreiben und in der Unterschriftszeile eingesetzt. |
+| `CORS_ORIGIN` | _(leer)_ | Same-origin only. Nur setzen, wenn die App von einer anderen Origin angesprochen werden soll (z.B. `https://app.example.com`). |
 
 ## npm-Scripts
 

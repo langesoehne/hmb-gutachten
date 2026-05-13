@@ -1203,9 +1203,11 @@
         }
 
         function regenerateToken(formularName) {
-            return requestNewToken(formularName, {
-                title: 'Neuer öffentlicher Link',
-                description: 'Der bisherige Link ist ab sofort ungültig. Geben Sie diesen neuen Link an Ihren Kunden weiter.'
+            confirmAction(`Für "${formularName}" einen neuen Link erzeugen? Der bisherige Link wird dadurch sofort ungültig.`, () => {
+                requestNewToken(formularName, {
+                    title: 'Neuer öffentlicher Link',
+                    description: 'Der bisherige Link ist ab sofort ungültig. Geben Sie diesen neuen Link an Ihren Kunden weiter.'
+                });
             });
         }
 

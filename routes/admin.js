@@ -73,16 +73,29 @@ router.get('/api/admin/list', basicAuth, (req, res) => {
       ORDER BY s.created_at DESC
     `).all();
 
+    // Für die Progress-Berechnung pro Submission brauchen wir nur hausansicht +
+    // grundriss. Eine Bulk-Query statt N+1 readFileMetaForSubmission-Aufrufen.
+    const imageRows = db.prepare(`
+      SELECT submission_id, kind, original_name, size
+      FROM files
+      WHERE kind IN ('hausansicht', 'grundriss')
+    `).all();
+    const imagesBySubmission = new Map();
+    for (const f of imageRows) {
+      let entry = imagesBySubmission.get(f.submission_id);
+      if (!entry) {
+        entry = { hausansicht: null, grundriss: null };
+        imagesBySubmission.set(f.submission_id, entry);
+      }
+      entry[f.kind] = { original_name: f.original_name || f.kind, size: f.size };
+    }
+
     const submissions = rows.map((s) => {
       let progress = null;
       let progressExpert = null;
       try {
         const data = s.data ? JSON.parse(s.data) : {};
-        const meta = readFileMetaForSubmission(s.formularName);
-        const images = {
-          hausansicht: meta.hausansicht,
-          grundriss: meta.grundriss
-        };
+        const images = imagesBySubmission.get(s.formularName) || { hausansicht: null, grundriss: null };
         progress = RequiredFields.computeProgress(data, images);
         progressExpert = RequiredFields.computeExpertProgress(data, images);
       } catch (e) {
@@ -119,15 +132,16 @@ router.post('/api/admin/forms', basicAuth, (req, res) => {
       return res.status(400).json({ error: 'Formularname ist ungültig (1-200 Zeichen, keine Slashes)' });
     }
     const trimmed = formularName.trim();
-    const existing = db.prepare('SELECT formularName FROM submissions WHERE formularName = ?').get(trimmed);
-    if (existing) {
-      return res.status(409).json({ error: 'Formularname existiert bereits' });
-    }
-
     const now = new Date().toISOString();
     const token = generateSubmissionToken();
 
-    withTransaction(() => {
+    // Existenz-Check + Inserts in derselben Transaktion (BEGIN IMMEDIATE),
+    // sonst können zwei parallele Requests die SELECT-Phase beide passieren
+    // und der zweite INSERT scheitert dann an der PRIMARY-KEY-Violation (500 statt 409).
+    const conflict = withTransaction(() => {
+      const existing = db.prepare('SELECT formularName FROM submissions WHERE formularName = ?').get(trimmed);
+      if (existing) return true;
+
       db.prepare(`
         INSERT INTO submissions (formularName, data, created_at, updated_at)
         VALUES (?, ?, ?, ?)
@@ -137,7 +151,12 @@ router.post('/api/admin/forms', basicAuth, (req, res) => {
         INSERT INTO submission_tokens (token, submission_id, created_at)
         VALUES (?, ?, ?)
       `).run(token, trimmed, now);
+      return false;
     });
+
+    if (conflict) {
+      return res.status(409).json({ error: 'Formularname existiert bereits' });
+    }
 
     res.status(201).json({
       formularName: trimmed,
@@ -310,8 +329,9 @@ router.get('/api/admin/files/:formularName/:filename', basicAuth, (req, res) => 
     if (!fileRecord) {
       return res.status(404).json({ error: 'File not found' });
     }
+    const displayName = (fileRecord.original_name || 'datei').replace(/"/g, '');
     res.set('Content-Type', fileRecord.mime_type);
-    res.set('Content-Disposition', `attachment; filename="${fileRecord.original_name}"`);
+    res.set('Content-Disposition', `attachment; filename="${displayName}"`);
     res.send(Buffer.isBuffer(fileRecord.data) ? fileRecord.data : Buffer.from(fileRecord.data));
   } catch (error) {
     console.error('Error serving file:', error);
