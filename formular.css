@@ -1133,6 +1133,10 @@ body.mode-public .site-nav-pill {
     margin-top: 0;
 }
 
+.image-captions-row {
+    margin-top: 14px;
+}
+
 /* ---------- Anlage-Bilder (admin-only, beliebig viele Bilder mit Caption) ---------- */
 .anlage-help {
     font-size: 13px;

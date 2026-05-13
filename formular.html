@@ -560,50 +560,7 @@
             <!-- Bilder -->
             <div class="section" data-section-key="bilder">
                 <h2>Bilder</h2>
-                <p class="form-hint" style="margin-bottom: 14px; color: #6d6d6d; font-size: 0.9rem; font-style: italic;">Bilder + Bild-Beschriftungen für das Gutachten. Beschriftungen erscheinen unter den Bildern im Word-Output.</p>
-
-                <div class="image-section">
-                    <h3>Bild-Beschriftungen</h3>
-                    <div class="form-row">
-                        <div class="form-group" style="flex: 1;">
-                            <label>Bild 1 (Hauptansicht):</label>
-                            <input type="text" name="bild1_caption" list="dl_bild1" placeholder="z.B. Ansicht von Süd-West (Hohenzollernstraße)">
-                            <datalist id="dl_bild1">
-                                <option value="Ansicht von Süd-West">
-                                <option value="Ansicht von Süd-Ost">
-                                <option value="Ansicht von Nord-West">
-                                <option value="Ansicht von Nord-Ost">
-                                <option value="Ansicht von Süden">
-                                <option value="Ansicht von Norden">
-                                <option value="Straßenansicht">
-                            </datalist>
-                        </div>
-                        <div class="form-group" style="flex: 1;">
-                            <label>Bild 3 (Detailansicht):</label>
-                            <input type="text" name="bild3_caption" list="dl_bild3" placeholder="z.B. Wohngebäude Ansicht West">
-                            <datalist id="dl_bild3">
-                                <option value="Wohngebäude Ansicht West">
-                                <option value="Wohngebäude Ansicht Ost">
-                                <option value="Wohngebäude Ansicht Süd">
-                                <option value="Wohngebäude Ansicht Nord">
-                                <option value="Wohngebäude Ansicht Süd-Ost (Hofseite)">
-                                <option value="Gewerbegebäude / Eingangsbereich; Ansicht Südost">
-                            </datalist>
-                        </div>
-                        <div class="form-group" style="flex: 1;">
-                            <label>Bild 4 (Grundriss):</label>
-                            <input type="text" name="bild4_caption" list="dl_bild4" placeholder="z.B. Grundriss Wohnung 1; EG">
-                            <datalist id="dl_bild4">
-                                <option value="Grundriss">
-                                <option value="Grundriss EG">
-                                <option value="Grundriss OG">
-                                <option value="Grundriss DG">
-                                <option value="Grundriss Wohnung 1; EG">
-                                <option value="Grundriss UG / Tiefgarage">
-                            </datalist>
-                        </div>
-                    </div>
-                </div>
+                <p class="form-hint" style="margin-bottom: 14px; color: #6d6d6d; font-size: 0.9rem; font-style: italic;">Bilder und Bildunterschriften für das Gutachten.</p>
 
                 <div class="image-section">
                     <h3>Hausansicht (Frontansicht) <span class="required-badge">Pflicht</span></h3>
@@ -625,6 +582,21 @@
                             <div class="image-upload-status" data-role="status">Noch kein Bild hochgeladen</div>
                         </div>
                     </div>
+                    <div class="form-row image-captions-row">
+                        <div class="form-group" style="flex: 1;">
+                            <label>Bildunterschrift:</label>
+                            <input type="text" name="bild1_caption" list="dl_bild1" placeholder="z.B. Ansicht von Süd-West">
+                            <datalist id="dl_bild1">
+                                <option value="Ansicht von Süd-West">
+                                <option value="Ansicht von Süd-Ost">
+                                <option value="Ansicht von Nord-West">
+                                <option value="Ansicht von Nord-Ost">
+                                <option value="Ansicht von Süden">
+                                <option value="Ansicht von Norden">
+                                <option value="Straßenansicht">
+                            </datalist>
+                        </div>
+                    </div>
                 </div>
                 <div class="image-section">
                     <h3>Grundriss <span class="required-badge">Pflicht</span></h3>
@@ -644,6 +616,19 @@
                             </label>
                             <button type="button" class="image-upload-btn secondary" data-role="discard" hidden>Auswahl verwerfen</button>
                             <div class="image-upload-status" data-role="status">Noch kein Bild hochgeladen</div>
+                        </div>
+                    </div>
+                    <div class="form-row image-captions-row">
+                        <div class="form-group" style="flex: 1;">
+                            <label>Bildunterschrift:</label>
+                            <input type="text" name="bild4_caption" list="dl_bild4" placeholder="z.B. Grundriss EG">
+                            <datalist id="dl_bild4">
+                                <option value="Grundriss">
+                                <option value="Grundriss EG">
+                                <option value="Grundriss OG">
+                                <option value="Grundriss DG">
+                                <option value="Grundriss UG / Tiefgarage">
+                            </datalist>
                         </div>
                     </div>
                 </div>
@@ -1065,7 +1050,7 @@
                 <div class="radio-group">
                     <div class="radio-option">
                         <input type="radio" id="warmwasser_zentral" name="warmwasser" value="zentral">
-                        <label for="warmwasser_zentral">zentral</label>
+                        <label for="warmwasser_zentral">Zentral</label>
                     </div>
                     <div class="radio-option">
                         <input type="radio" id="warmwasser_durchlauferhitzer" name="warmwasser" value="durchlauferhitzer">
@@ -1075,12 +1060,18 @@
                         <input type="radio" id="warmwasser_therme" name="warmwasser" value="therme">
                         <label for="warmwasser_therme">Therme</label>
                     </div>
+                </div>
+                <div class="radio-group" style="margin-top: 10px;">
                     <div class="radio-option">
-                        <input type="radio" id="warmwasser_gas" name="warmwasser" value="gas">
+                        <input type="radio" id="warmwasser_gas" name="warmwasser_art" value="gas">
                         <label for="warmwasser_gas">Gas</label>
                     </div>
                     <div class="radio-option">
-                        <input type="radio" id="warmwasser_strom" name="warmwasser" value="strom">
+                        <input type="radio" id="warmwasser_oel" name="warmwasser_art" value="oel">
+                        <label for="warmwasser_oel">Öl</label>
+                    </div>
+                    <div class="radio-option">
+                        <input type="radio" id="warmwasser_strom" name="warmwasser_art" value="strom">
                         <label for="warmwasser_strom">Strom</label>
                     </div>
                 </div>

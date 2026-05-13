@@ -54,7 +54,8 @@
         { name: 'heizung',                  label: 'Heizungsart (Verteilung)',       section: 'haustechnik', type: 'radio' },
         { name: 'heizung_art',              label: 'Heizung Energieträger',          section: 'haustechnik', type: 'radio' },
         { name: 'heizung_baujahr',          label: 'Baujahr Heizung',                section: 'haustechnik' },
-        { name: 'warmwasser',               label: 'Warmwasser',                     section: 'haustechnik', type: 'radio' },
+        { name: 'warmwasser',               label: 'Warmwasser (Erzeugungsart)',     section: 'haustechnik', type: 'radio' },
+        { name: 'warmwasser_art',           label: 'Warmwasser Energieträger',       section: 'haustechnik', type: 'radio' },
         { name: 'solarthermie',             label: 'Solarthermie (ja/nein)',         section: 'haustechnik', type: 'radio' },
         { name: 'photovoltaik',             label: 'Photovoltaik (ja/nein)',         section: 'haustechnik', type: 'radio' },
 
