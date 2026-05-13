@@ -1113,7 +1113,15 @@
             document.querySelectorAll('[data-action="toggle-finalized"]').forEach((cb) => {
                 cb.addEventListener('change', () => {
                     const name = cb.getAttribute('data-name');
-                    setFinalized(name, cb.checked, cb);
+                    const willFinalize = cb.checked;
+                    const message = willFinalize
+                        ? `Möchten Sie die Eingaben für "${name}" wirklich sperren? Der Klient kann dann keine Änderungen mehr vornehmen.`
+                        : `Möchten Sie die Sperre für "${name}" wirklich aufheben? Der Klient kann dann wieder Änderungen vornehmen.`;
+                    confirmAction(message, () => {
+                        setFinalized(name, willFinalize, cb);
+                    }, () => {
+                        cb.checked = !willFinalize;
+                    });
                 });
             });
             document.querySelectorAll('[data-action]:not([data-action="toggle-finalized"])').forEach((btn) => {
