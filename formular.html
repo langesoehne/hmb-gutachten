@@ -159,6 +159,14 @@
                         <input type="text" name="ort">
                     </div>
                 </div>
+                <!-- Adresse-prüfen-Tool für die Kontakt-/Auftraggeber-Adresse -->
+                <div class="tools-bar" id="auftraggeberToolsBar">
+                    <div class="tools-bar-label">Tipp: Mit „Adresse prüfen" wird die Schreibweise Ihrer Adresse überprüft und automatisch vervollständigt.</div>
+                    <button type="button" class="tools-bar-btn" data-tool="geocode" data-scope="auftraggeber" title="Adresse via OpenStreetMap prüfen und übernehmen">
+                        <span class="tools-icon">📍</span> Adresse prüfen
+                    </button>
+                    <div id="geocodeResultBoxAuftraggeber" hidden></div>
+                </div>
             </div>
 
             <!-- Angaben zum Objekt -->
@@ -193,7 +201,7 @@
                 <div class="tools-bar" id="objektToolsBar">
                     <div class="tools-bar-label admin-only">Recherche-Tools (öffnen die externen Dienste mit der oben eingegebenen Objekt-Adresse):</div>
                     <div class="tools-bar-label public-only">Tipp: Mit „Adresse prüfen" wird die Schreibweise Ihrer Objekt-Adresse überprüft und automatisch vervollständigt.</div>
-                    <button type="button" class="tools-bar-btn" data-tool="geocode" title="Adresse via OpenStreetMap prüfen und Koordinaten ermitteln">
+                    <button type="button" class="tools-bar-btn" data-tool="geocode" data-scope="objekt" title="Adresse via OpenStreetMap prüfen und Koordinaten ermitteln">
                         <span class="tools-icon">📍</span> Adresse prüfen
                     </button>
                     <a href="#" class="tools-bar-btn admin-only" data-tool-link="google-maps" target="_blank" rel="noopener" title="Google Maps mit Adresse öffnen">

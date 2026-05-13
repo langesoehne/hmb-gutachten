@@ -1159,33 +1159,76 @@ function lookupBundeslandByPlz(plz) {
     return PLZ_TO_BUNDESLAND[trimmed.slice(0, 2)] || null;
 }
 
-function getObjectAddressString({ withCountry = false } = {}) {
+// Adress-Scopes für das Geocode-Tool. "objekt" hat zusätzlich die Recherche-
+// Deeplinks (Maps/Streetview/Geoindex/…) — "auftraggeber" nur "Adresse prüfen".
+const ADDRESS_SCOPES = {
+    objekt: {
+        fields: {
+            strasse: 'objekt_strasse',
+            hausnummer: 'objekt_hausnummer',
+            hausnummer_zusatz: 'objekt_hausnummer_zusatz',
+            plz: 'objekt_plz',
+            ort: 'objekt_ort',
+        },
+        resultBoxId: 'geocodeResultBox',
+        latDatasetKey: 'objektLat',
+        lonDatasetKey: 'objektLon',
+    },
+    auftraggeber: {
+        fields: {
+            strasse: 'strasse',
+            hausnummer: 'hausnummer',
+            hausnummer_zusatz: 'hausnummer_zusatz',
+            plz: 'plz',
+            ort: 'ort',
+        },
+        resultBoxId: 'geocodeResultBoxAuftraggeber',
+        latDatasetKey: 'auftraggeberLat',
+        lonDatasetKey: 'auftraggeberLon',
+    },
+};
+
+function getAddressString(scope, { withCountry = false } = {}) {
+    const cfg = ADDRESS_SCOPES[scope];
+    if (!cfg) return '';
     const f = (n) => {
         const el = document.querySelector(`[name="${n}"]`);
         return el ? (el.value || '').trim() : '';
     };
-    const street = [f('objekt_strasse'), f('objekt_hausnummer'), f('objekt_hausnummer_zusatz')].filter(Boolean).join(' ');
-    const city = [f('objekt_plz'), f('objekt_ort')].filter(Boolean).join(' ');
+    const street = [f(cfg.fields.strasse), f(cfg.fields.hausnummer), f(cfg.fields.hausnummer_zusatz)].filter(Boolean).join(' ');
+    const city = [f(cfg.fields.plz), f(cfg.fields.ort)].filter(Boolean).join(' ');
     const parts = [street, city].filter(Boolean);
     if (withCountry && parts.length) parts.push('Deutschland');
     return parts.join(', ');
 }
 
-function getObjectCoordinates() {
-    const lat = parseFloat(document.body.dataset.objektLat || '');
-    const lon = parseFloat(document.body.dataset.objektLon || '');
+function getObjectAddressString(opts) {
+    return getAddressString('objekt', opts);
+}
+
+function getCoordinates(scope) {
+    const cfg = ADDRESS_SCOPES[scope];
+    if (!cfg) return null;
+    const lat = parseFloat(document.body.dataset[cfg.latDatasetKey] || '');
+    const lon = parseFloat(document.body.dataset[cfg.lonDatasetKey] || '');
     if (!isNaN(lat) && !isNaN(lon)) return { lat, lon };
     return null;
 }
 
-function setObjectCoordinates(lat, lon) {
+function setCoordinates(scope, lat, lon) {
+    const cfg = ADDRESS_SCOPES[scope];
+    if (!cfg) return;
     if (lat == null || lon == null) {
-        delete document.body.dataset.objektLat;
-        delete document.body.dataset.objektLon;
+        delete document.body.dataset[cfg.latDatasetKey];
+        delete document.body.dataset[cfg.lonDatasetKey];
         return;
     }
-    document.body.dataset.objektLat = String(lat);
-    document.body.dataset.objektLon = String(lon);
+    document.body.dataset[cfg.latDatasetKey] = String(lat);
+    document.body.dataset[cfg.lonDatasetKey] = String(lon);
+}
+
+function getObjectCoordinates() {
+    return getCoordinates('objekt');
 }
 
 function buildToolUrl(toolKey) {
@@ -1236,9 +1279,11 @@ function copyAddressToClipboard() {
     return Promise.resolve(false);
 }
 
-async function runGeocode() {
-    const addr = getObjectAddressString({ withCountry: true });
-    const box = document.getElementById('geocodeResultBox');
+async function runGeocode(scope) {
+    const cfg = ADDRESS_SCOPES[scope];
+    if (!cfg) return;
+    const addr = getAddressString(scope, { withCountry: true });
+    const box = document.getElementById(cfg.resultBoxId);
     if (!box) return;
     if (!addr) {
         box.hidden = false;
@@ -1257,15 +1302,17 @@ async function runGeocode() {
             throw new Error(err.error || `HTTP ${resp.status}`);
         }
         const data = await resp.json();
-        renderGeocodeResults(data.results || [], addr);
+        renderGeocodeResults(scope, data.results || [], addr);
     } catch (err) {
         box.className = 'geocode-result is-error';
         box.textContent = 'Geocoding fehlgeschlagen: ' + (err.message || err);
     }
 }
 
-function renderGeocodeResults(results, queryAddr) {
-    const box = document.getElementById('geocodeResultBox');
+function renderGeocodeResults(scope, results, queryAddr) {
+    const cfg = ADDRESS_SCOPES[scope];
+    if (!cfg) return;
+    const box = document.getElementById(cfg.resultBoxId);
     if (!box) return;
     if (!results.length) {
         box.className = 'geocode-result is-error';
@@ -1288,17 +1335,19 @@ function renderGeocodeResults(results, queryAddr) {
         apply.type = 'button';
         apply.className = 'geocode-apply';
         apply.textContent = 'übernehmen';
-        apply.addEventListener('click', () => applyGeocodeResult(r));
+        apply.addEventListener('click', () => applyGeocodeResult(scope, r));
         row.appendChild(span);
         row.appendChild(apply);
         box.appendChild(row);
     });
-    // Erste Antwort schon mal als Default-Koordinaten merken (für Streetview-Browser-Link)
+    // Erste Antwort schon mal als Default-Koordinaten merken (für Streetview-Browser-Link bei objekt)
     const first = results[0];
-    setObjectCoordinates(first.lat, first.lon);
+    setCoordinates(scope, first.lat, first.lon);
 }
 
-function applyGeocodeResult(r) {
+function applyGeocodeResult(scope, r) {
+    const cfg = ADDRESS_SCOPES[scope];
+    if (!cfg) return;
     const a = r.address || {};
     const setVal = (name, val) => {
         if (!val) return;
@@ -1312,13 +1361,13 @@ function applyGeocodeResult(r) {
     const housenumber = a.house_number || '';
     const plz = a.postcode || '';
     const ort = a.city || a.town || a.village || a.municipality || a.suburb || '';
-    if (street) setVal('objekt_strasse', street);
-    if (housenumber) setVal('objekt_hausnummer', housenumber);
-    if (plz) setVal('objekt_plz', plz);
-    if (ort) setVal('objekt_ort', ort);
-    setObjectCoordinates(r.lat, r.lon);
-    refreshToolDeeplinks();
-    const box = document.getElementById('geocodeResultBox');
+    if (street) setVal(cfg.fields.strasse, street);
+    if (housenumber) setVal(cfg.fields.hausnummer, housenumber);
+    if (plz) setVal(cfg.fields.plz, plz);
+    if (ort) setVal(cfg.fields.ort, ort);
+    setCoordinates(scope, r.lat, r.lon);
+    if (scope === 'objekt') refreshToolDeeplinks();
+    const box = document.getElementById(cfg.resultBoxId);
     if (box) {
         box.className = 'geocode-result';
         box.textContent = '✓ Adresse übernommen (' + (r.display_name || '') + ').';
@@ -1346,19 +1395,23 @@ function attachPlzBundeslandListener() {
 }
 
 function attachToolListeners() {
-    ['objekt_strasse', 'objekt_hausnummer', 'objekt_hausnummer_zusatz', 'objekt_plz', 'objekt_ort'].forEach((n) => {
-        const el = document.querySelector(`[name="${n}"]`);
-        if (!el) return;
-        el.addEventListener('input', () => {
-            // Adresse hat sich geändert → Koordinaten verwerfen
-            setObjectCoordinates(null, null);
-            if (!IS_PUBLIC) refreshToolDeeplinks();
+    Object.entries(ADDRESS_SCOPES).forEach(([scopeKey, cfg]) => {
+        Object.values(cfg.fields).forEach((n) => {
+            const el = document.querySelector(`[name="${n}"]`);
+            if (!el) return;
+            el.addEventListener('input', () => {
+                // Adresse hat sich geändert → Koordinaten verwerfen
+                setCoordinates(scopeKey, null, null);
+                if (scopeKey === 'objekt' && !IS_PUBLIC) refreshToolDeeplinks();
+            });
         });
     });
 
-    // "Adresse prüfen"-Button — auch im Public-Modus aktiv (nutzt Submission-Token)
-    const geocodeBtn = document.querySelector('[data-tool="geocode"]');
-    if (geocodeBtn) geocodeBtn.addEventListener('click', runGeocode);
+    // "Adresse prüfen"-Buttons — auch im Public-Modus aktiv (nutzt Submission-Token)
+    document.querySelectorAll('[data-tool="geocode"]').forEach((btn) => {
+        const scope = btn.getAttribute('data-scope') || 'objekt';
+        btn.addEventListener('click', () => runGeocode(scope));
+    });
 
     if (IS_PUBLIC) return; // Recherche-Deeplinks sind reine Sachverständigen-Funktion
 
